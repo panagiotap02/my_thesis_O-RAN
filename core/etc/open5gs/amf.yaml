@@ -1,0 +1,57 @@
+logger:
+  file:
+    path: /var/local/log/open5gs/amf.log
+
+amf:
+  amf_name: open5gs-amf
+  sbi:
+    server:
+      - address: 127.0.0.5
+        port: 7777
+    client:
+#      nrf:
+#        - uri: http://127.0.0.10:7777
+      scp:
+        - uri: http://127.0.0.200:7777
+
+  ngap:
+    server:
+      - address: 10.1.6.206
+
+  guami:
+    - plmn_id:
+        mcc: 001
+        mnc: 01
+      amf_id:
+        region: 2
+        set: 1
+
+  tai:
+    - plmn_id:
+        mcc: 001
+        mnc: 01
+      tac: 100
+
+  plmn_support:
+    - plmn_id:
+        mcc: 001
+        mnc: 01
+      s_nssai:
+        - sst: 1
+
+  # PLUS THIS SECURITY SECTION:
+  security:
+    integrity_order:
+      - NIA0
+      - NIA1
+      - NIA2
+    ciphering_order:
+      - NEA0
+      - NEA1
+      - NEA2
+
+  time:
+#    t3502:
+#      value: 720   # 12 minutes * 60 = 720 seconds
+    t3512:
+      value: 540    # 9 minutes * 60 = 540 seconds
