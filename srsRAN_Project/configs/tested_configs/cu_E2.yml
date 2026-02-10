@@ -1,0 +1,39 @@
+# Example config for a locally deployed CU listening on the localhost interface for a DU connection
+
+cu_cp:
+  amf:
+    addr: 10.1.6.206
+    port: 38412
+    bind_addr: 172.16.100.96
+    supported_tracking_areas:
+      - tac: 100
+        plmn_list:
+          - plmn: "00101"
+            tai_slice_support_list:
+              - sst: 1
+  f1ap:
+    bind_addr: 127.0.10.1
+
+cu_up:
+  f1u:
+    socket:
+      -
+        bind_addr: 127.0.10.1
+
+log:
+  filename: /tmp/cu.log
+  all_level: warning
+
+pcap:
+  ngap_enable: false
+  ngap_filename: /tmp/cu_ngap.pcap
+  e2ap_enable: true                 # Set to true to enable E2AP PCAPs.
+  e2ap_cu_cp_filename: /tmp/gnb_cu_cp_e2ap.pcap  # Path where the CU-CP E2AP PCAP is stored.
+  e2ap_cu_up_filename: /tmp/gnb_cu_up_e2ap.pcap  # Path where the CU-UP E2AP PCAP is stored.
+
+e2:
+  e2sm_kpm_enabled: true            # Enable KPM service module
+  e2sm_rc_enabled: true             # Enable RC service module
+  addr: 127.0.0.1                   # RIC IP address
+  #bind_addr: 127.0.0.100           # A local IP that the E2 agent binds to for traffic from the RIC. ONLY required if running the RIC on a separate machine. 
+  port: 36421                       # RIC port
