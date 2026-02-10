@@ -1,0 +1,46 @@
+# Stage 1: Build environment (stretch) to download and install C-libraries
+FROM python:3.8-slim as stretch
+RUN apt-get clean -y && apt-get update -y && apt-get install -y wget curl net-tools iputils-ping
+
+ARG rmr_version=4.9.4
+ARG e2ap_version=1.1.0
+
+RUN wget -nv --content-disposition https://packagecloud.io/o-ran-sc/release/packages/debian/stretch/rmr_${rmr_version}_amd64.deb/download.deb
+RUN wget -nv --content-disposition https://packagecloud.io/o-ran-sc/release/packages/debian/stretch/rmr-dev_${rmr_version}_amd64.deb/download.deb
+RUN wget -nv --content-disposition https://packagecloud.io/o-ran-sc/release/packages/debian/stretch/riclibe2ap_${e2ap_version}_amd64.deb/download.deb
+RUN wget -nv --content-disposition https://packagecloud.io/o-ran-sc/release/packages/debian/stretch/riclibe2ap-dev_${e2ap_version}_amd64.deb/download.deb
+
+RUN dpkg -i rmr_${rmr_version}_amd64.deb
+RUN dpkg -i rmr-dev_${rmr_version}_amd64.deb
+RUN dpkg -i riclibe2ap_${e2ap_version}_amd64.deb
+RUN dpkg -i riclibe2ap-dev_${e2ap_version}_amd64.deb
+
+# Stage 2: Final Runtime Image
+FROM python:3.8-slim
+ARG rmr_version=4.9.4
+ARG e2ap_version=1.1.0
+
+# Copy the libraries from the first stage
+COPY --from=stretch /usr/local/lib/librmr_si.so.${rmr_version} /usr/local/lib/librmr_si.so
+COPY --from=stretch /usr/local/lib/libriclibe2ap.so.${e2ap_version} /usr/local/lib/libriclibe2ap.so
+
+# --- FINAL UPDATED PIP LINE ---
+# Includes six (compatibility), asn1tools (packing), pyyaml (config), 
+# plus pandas/matplotlib for data handling.
+RUN pip install --upgrade pip && \
+    pip install ricxappframe inotify_simple mdclogpy msgpack ricsdl numpy pandas matplotlib six asn1tools pyyaml
+
+# Set environment for C-libraries
+ENV LD_LIBRARY_PATH=/usr/local/lib
+ENV PYTHONUNBUFFERED=1
+
+WORKDIR /app
+
+# Copy all files from your current directory into the container
+COPY . /app
+
+# Set default route file path inside the container
+ENV RMR_SEED_RT=/app/my_routes.rt
+
+# Automatically run your xApp on start
+CMD ["python3", "my_smart_rc_xapp.py"]
