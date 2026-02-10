@@ -1,0 +1,38 @@
+# Example config for a DU with one 10MHz FDD cell using a USRP as RF frontend.
+f1ap:
+  cu_cp_addr: 127.0.10.1
+  bind_addr: 127.0.10.2
+
+f1u:
+  socket:
+    -
+      bind_addr: 127.0.10.2
+
+ru_sdr:
+  device_driver: uhd
+  device_args: type=b200,num_recv_frames=64,num_send_frames=64
+  srate: 11.52
+  otw_format: sc12  
+  tx_gain: 50
+  rx_gain: 30
+
+cell_cfg:
+  dl_arfcn: 368500
+  band: 3
+  channel_bandwidth_MHz: 10
+  common_scs: 15
+  plmn: "00101"
+  tac: 100
+  pci: 1
+
+log:
+  filename: /tmp/du.log
+  all_level: warning
+
+pcap:
+  mac_enable: false
+  mac_filename: /tmp/du_mac.pcap
+  f1ap_enable: false
+  f1ap_filename: /tmp/du_f1ap.pcap
+  f1u_enable: false
+  f1u_filename: /tmp/du_f1u.pcap
