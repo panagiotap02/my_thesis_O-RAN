@@ -61,8 +61,10 @@ srsRAN Project	 23.10+	      O-RAN gNodeB with E2 Agent
 MongoDB	         8.0+       	Subscriber database for Open5GS
 UHD Drivers	     4.5+	        Drivers for USRP B210
 
+---
 
 ## Startup Sequence (Execution Guide)
+
 Follow the steps below in the exact order to ensure proper synchronization between the network entities.
 
 
