@@ -1,5 +1,6 @@
-Repository Structure
+## Repository Structure
 
+```text
 my_thesis_O-RAN/
 ├── oran-sc-ric/               
 │   ├── xApps/
