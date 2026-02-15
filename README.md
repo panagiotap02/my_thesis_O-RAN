@@ -67,14 +67,13 @@ Follow the steps below in the exact order to ensure proper synchronization betwe
 
 
 ### 1. Start the Core Network (Open5GS)
-
 Connect to the Core Network VM (`ssh ubuntu@10.1.6.206`) and restart all services:
 
 ```bash
 sudo systemctl restart open5gs-amfd open5gs-smfd open5gs-upfd open5gs-nrfd open5gs-ausfd open5gs-udmd open5gs-udrd open5gs-pcfd open5gs-nssfd open5gs-bsfd open5gs-scpd
 ```
 
-### Verification: Run this command to ensure the core amf service is active
+Verification: Run this command to ensure the core amf service is active
 ```bash
 sudo systemctl status open5gs-amfd 
 ```
