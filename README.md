@@ -67,6 +67,7 @@ Follow the steps below in the exact order to ensure proper synchronization betwe
 
 
 ### 1. Start the Core Network (Open5GS)
+
 Connect to the Core Network VM (`ssh ubuntu@10.1.6.206`) and restart all services:
 
 ```bash
