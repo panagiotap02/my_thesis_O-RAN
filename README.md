@@ -45,7 +45,7 @@ Blocks (PRBs) when congestion is detected.
 Hardware Requirements:
  
 Lab Workstation Dell OptiPlex 7060 (or equivalent) with Intel Core i7-8700, 16GB RAM, Ubuntu 22.04
-Core Network VM Separate machine or VM with Ubuntu Server, 4GB+ RAM, IP: 10.1.6.206
+Core Network VM Separate machine or VM with Ubuntu Server, 4GB+ RAM
 SDR (O-RU)  USRP B210 with USB 3.0 connection
 User Equipment (UE) 5G-compatible smartphone (e.g., Samsung Galaxy A17 5G)
 SIM Card    Programmable SIM card with IMSI: 001010000000001
@@ -69,7 +69,7 @@ Follow the steps below in the exact order to ensure proper synchronization betwe
  
  
 ### 1. Start the Core Network (Open5GS)
-Connect to the Core Network VM (`ssh ubuntu@10.1.6.206`) and restart all services:
+Connect to the Core Network VM and restart all services:
  
 ```bash
 sudo systemctl restart open5gs-amfd open5gs-smfd open5gs-upfd open5gs-nrfd open5gs-ausfd open5gs-udmd open5gs-udrd open5gs-pcfd open5gs-nssfd open5gs-bsfd open5gs-scpd
@@ -82,7 +82,7 @@ sudo systemctl status open5gs-amfd
  
  
 ### 2. Start Near-RT RIC
-On the Lab Workstation (ssh panagiotopoulou@172.16.100.96), deploy the RIC:
+On the Lab Workstation, deploy the RIC:
 ```bash
 cd ~/clean/oran-sc-ric
 docker compose down
