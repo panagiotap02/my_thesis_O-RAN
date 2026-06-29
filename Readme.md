@@ -81,9 +81,7 @@ This allows the xApp to dynamically distinguish between normal network jitter (w
 
 Congestion State: If the condition $|Z_{score}| > 2.0$ is met, a traffic spike (anomaly) is detected[cite: 1, 2]. The xApp immediately calculates a throttled PRB threshold:
 
-
 $$\text{New PRB Limit} = \max\left(10, \lfloor \text{Current Limit} \times 0.8 \rfloor\right)$$
-
 
 This value is wrapped into an E2SM-RC Control Message (Format 1 encoded via ASN.1 PER rules) and dispatched over the E2 interface as an RMR 12040 (RIC_CONTROL_REQ)[cite: 1, 2].
 
@@ -116,14 +114,6 @@ my_thesis_O-RAN/
 │
 └── README.md                    
 
-
-This research implementation leverages and extends the following outstanding open-source projects:
-
-Open5GS Core Network Release Repository[cite: 1]
-
-srsRAN Software Radio Systems 5G Suite[cite: 1]
-
-O-RAN Software Community (OSC) Near-RT RIC Integration[cite: 1]
 
 ⚙️ System Requirements
 
