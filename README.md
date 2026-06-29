@@ -81,7 +81,10 @@ $$\text{New PRB Limit} = \max\left(10, \lfloor \text{Current Limit} \times 0.8 \
 This value is wrapped into an E2SM-RC Control Message (Format 1 encoded via ASN.1 PER rules) and dispatched over the E2 interface as an RMR 12040 (RIC_CONTROL_REQ).
 
 ### Recovery State: When the Z-Score returns to the $[-2.0, 2.0]$ range, the scheduler gradually restores resources in incremental steps of $+5$ PRBs per cycle until it reaches full capacity ($100\%$).
-       
+
+## End-to-End Testbed Setup       
+![End-to-End Testbed Architecture](all.png)
+
 ## Repository Structure
  
 ```text
