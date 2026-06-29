@@ -111,7 +111,7 @@ my_thesis_O-RAN/
 └── README.md                    
  
  ```
-This project is based on the following open source implementations:
+## This project is based on the following open source implementations:
 1.Guide for installing and configuring Open5GS Core Network:
 https://open5gs.org/  
 https://open5gs.org/open5gs/docs/guide/01-quickstart/ (Open5GS Documentation)
@@ -207,3 +207,4 @@ python3 live_dashboard.py
 ```
  
 ### Access: Open your browser at http://127.0.0.1:8988
+
