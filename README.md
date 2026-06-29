@@ -36,6 +36,7 @@ To overcome local FPGA limitations on SDR hardware while maintaining granular sc
 Split 7.2x (Logical Layer - High-PHY / MAC): All scheduling decisions and high-level physical layer processing are executed in software (O-DU CPU).This enables the xApp to dynamically intercept and alter the MAC Scheduler parameters in near-real-time.
 
 Split 8 (Physical/Transport Layer - Low-PHY / RF): Time-domain baseband I/Q samples are transferred via USB 3.0 from the workstation (emulating Low-PHY in software) to the USRP B210, which handles raw RF transmission over 5G NR Band n78 (3.5 GHz TDD) with a 20 MHz bandwidth.
+
 ## Smart RC xApp Closed-Loop Logic
 
 The xApp orchestrates a low-latency MAPE-K (Monitor-Analyze-Decide-Act) loop[cite: 1, 2]:
@@ -59,6 +60,9 @@ The xApp orchestrates a low-latency MAPE-K (Monitor-Analyze-Decide-Act) loop[cit
        |  +---------------------+                   |
        |  |   O-DU (Scheduler)  |                   |
        +--+---------------------+-------------------|
+       
+## Sequence Diagram
+![End-to-End Testbed Architecture](seq.png)
 
 ### 1. Monitor (E2SM-KPM)
 
