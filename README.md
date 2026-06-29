@@ -1,3 +1,42 @@
+# Experimental Deployment of an End-to-End O-RAN Testbed with xApp Development in Near-RT RIC Environment for Dynamic Radio Resource Management and 5G Network Decongestion
+
+## Diploma Thesis | University of Patras
+
+Department of Electrical and Computer Engineering
+Author: Panagiota Panagiotopoulou (A.M. 1083759)
+Supervisor: Prof. Spyridon Denazis
+Co-Examiners: Prof. Alexios Birbas, Prof. Odysseas Koufopavlou
+Defense Date: February 2026
+
+## Project Overview
+
+This repository hosts the implementation of a complete, disaggregated, software-based 5G Standalone (SA) network following the O-RAN Alliance specifications.
+
+The core contribution of this thesis is the Smart RC xApp, an intelligent control application executing within a Near-Real-Time RAN Intelligent Controller (Near-RT RIC) platform. By continuously monitoring real-time Downlink Throughput ($DRB.UEThpDl$) via the E2 interface, the xApp implements a closed-loop control mechanism utilizing a rolling Z-Score anomaly detection algorithm[cite: 1, 2]. Upon detecting sudden traffic spikes, it proactively mitigates congestion by dynamically adjusting physical resource constraints (PRB Throttling) on the gNodeB's MAC Scheduler, ensuring Quality of Service (QoS) stability.
+
+# Watch the Live Demo Video on YouTube: 
+https://youtu.be/3G7O6QQr06Q?si=I076kYnc8y9rLbsJ
+
+# System Architecture & Hybrid Functional Split
+
+The experimental testbed disaggregates the traditional monolithic RAN into standard-compliant entities distributed across cloud VMs and local edge hardware:
+
+5G Core Network (5GC): Powered by Open5GS running on a Cloud VM (Ubuntu Server). Subscriber database profiles are stored in MongoDB and provisioned via a custom WebUI accessed using secure SSH Tunneling.
+
+O-RAN gNodeB: Built using the srsRAN Project, disaggregated into a Centralized Unit (O-CU) and a Distributed Unit (O-DU), embedding a native E2 Agent.
+
+Open Radio Unit (O-RU): Handled by an Ettus USRP B210 Software Defined Radio (SDR) transceiver connected via a high-speed USB 3.0 interface.
+
+Near-RT RIC: Deployed via Docker Compose containers (O-RAN SC platform microservices), facilitating low-latency routing through the RMR (RIC Message Router) bus.
+
+# The Hybrid Functional Split Approach
+
+To overcome local FPGA limitations on SDR hardware while maintaining granular scheduling control, we developed a hybrid split architecture:
+
+Split 7.2x (Logical Layer - High-PHY / MAC): All scheduling decisions and high-level physical layer processing are executed in software (O-DU CPU)[cite: 1, 2]. This enables the xApp to dynamically intercept and alter the MAC Scheduler parameters in near-real-time[cite: 1, 2].
+
+Split 8 (Physical/Transport Layer - Low-PHY / RF): Time-domain baseband I/Q samples are transferred via USB 3.0 from the workstation (emulating Low-PHY in software) to the USRP B210, which handles raw RF transmission over 5G NR Band n78 (3.5 GHz TDD) with a 20 MHz bandwidth[cite: 1, 2].
+
 ## Repository Structure
  
 ```text
@@ -57,7 +96,7 @@ Docker           20.10+         Container runtime for Near-RT RIC
 Docker Compose   2.0+           Orchestration of RIC containers
 Python           3.8+           For xApp development and dashboard
 Open5GS          2.7+           5G Core Network
-srsRAN Project   23.10+       O-RAN gNodeB with E2 Agent
+srsRAN Project   23.10+         O-RAN gNodeB with E2 Agent
 MongoDB          8.0+           Subscriber database for Open5GS
 UHD Drivers      4.5+           Drivers for USRP B210
  
