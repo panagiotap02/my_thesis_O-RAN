@@ -281,16 +281,3 @@ Panagiota Panagiotopoulou
 LinkedIn: [Your LinkedIn Profile Link]
 
 Email: [Your Email Address]
-
-eof
-
-### 🛠️ Πώς θα το κάνεις Copy-Paste στο GitHub σου:
-
-1. **Άνοιξε το GitHub** στον browser σου και πήγαινε στο repository της διπλωματικής σου.
-2. Πάτα πάνω στο αρχείο **`README.md`** που ήδη υπάρχει.
-3. Στα δεξιά, πάτα το εικονίδιο με το **μολυβάκι** (Edit this file).
-4. Πάτα **Ctrl + A** (επιλογή όλων) και μετά **Backspace** (διαγραφή).
-5. Πήγαινε στο δεξί πλαίσιο εδώ στο chat, κάνε **Copy** όλο το περιεχόμενο του αρχείου που σου έφτιαξα και κάνε **Paste** στο GitHub.
-6. Πήγαινε στο κάτω μέρος της σελίδας στο GitHub, γράψε ένα commit message (π.χ. *«Update README with professional O-RAN architecture details and LaTeX formulas»*) και πάτα **Commit changes**.
-
-Με αυτή την αλλαγή, το GitHub σου πλέον δείχνει επίπεδο έμπειρου R&D Engineer! Πώς σου φαίνεται; 🚀
