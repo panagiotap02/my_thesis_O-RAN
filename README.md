@@ -14,10 +14,10 @@ This repository hosts the implementation of a complete, disaggregated, software-
 
 The core contribution of this thesis is the Smart RC xApp, an intelligent control application executing within a Near-Real-Time RAN Intelligent Controller (Near-RT RIC) platform. By continuously monitoring real-time Downlink Throughput ($DRB.UEThpDl$) via the E2 interface, the xApp implements a closed-loop control mechanism utilizing a rolling Z-Score anomaly detection algorithm[cite: 1, 2]. Upon detecting sudden traffic spikes, it proactively mitigates congestion by dynamically adjusting physical resource constraints (PRB Throttling) on the gNodeB's MAC Scheduler, ensuring Quality of Service (QoS) stability.
 
-# Watch the Live Demo Video on YouTube: 
+## Watch the Live Demo Video on YouTube: 
 https://youtu.be/3G7O6QQr06Q?si=I076kYnc8y9rLbsJ
 
-# System Architecture & Hybrid Functional Split
+## System Architecture & Hybrid Functional Split
 
 The experimental testbed disaggregates the traditional monolithic RAN into standard-compliant entities distributed across cloud VMs and local edge hardware:
 
@@ -29,7 +29,7 @@ Open Radio Unit (O-RU): Handled by an Ettus USRP B210 Software Defined Radio (SD
 
 Near-RT RIC: Deployed via Docker Compose containers (O-RAN SC platform microservices), facilitating low-latency routing through the RMR (RIC Message Router) bus.
 
-# The Hybrid Functional Split Approach
+## The Hybrid Functional Split Approach
 
 To overcome local FPGA limitations on SDR hardware while maintaining granular scheduling control, we developed a hybrid split architecture:
 
@@ -37,6 +37,52 @@ Split 7.2x (Logical Layer - High-PHY / MAC): All scheduling decisions and high-l
 
 Split 8 (Physical/Transport Layer - Low-PHY / RF): Time-domain baseband I/Q samples are transferred via USB 3.0 from the workstation (emulating Low-PHY in software) to the USRP B210, which handles raw RF transmission over 5G NR Band n78 (3.5 GHz TDD) with a 20 MHz bandwidth[cite: 1, 2].
 
+## Smart RC xApp Closed-Loop Logic
+
+The xApp orchestrates a low-latency MAPE-K (Monitor-Analyze-Decide-Act) loop[cite: 1, 2]:
+
+       +--------------------------------------------+
+       |                  Near-RT RIC               |
+       |  +------------------+   +---------------+  |
+       |  |   Smart RC xApp  |-->|  Redis DBaaS  |  |
+       |  +------------------+   +---------------+  |
+       |         ^        |                         |
+       |         | KPM    | RC                      |
+       |         | (12050)| (12040)                 |
+       +---------|--------|-------------------------+
+                 |        v
+       +---------|--------|-------------------------+
+       |    E2   |        | srsRAN gNodeB           |
+       |  +------|--------v-----+                   |
+       |  |       E2 Agent      |                   |
+       |  +---------------------+                   |
+       |  |    O-CU (Control)   |                   |
+       |  +---------------------+                   |
+       |  |   O-DU (Scheduler)  |                   |
+       +--+---------------------+-------------------|
+
+### 1. Monitor (E2SM-KPM)
+
+The xApp establishes an E2 Subscription ($RIC\_SUB\_REQ$) to the O-DU's E2 Agent[cite: 1, 2]. The gNodeB continuously measures the downlink user throughput ($DRB.UEThpDl$) at a granularity period of 1000ms and streams it back to the xApp via $RIC\_INDICATION$ (RMR type 12050) packets[cite: 1, 2].
+
+### 2. Analyze (Sliding Window & Z-Score)
+
+Incoming measurements ($x_i$) are pushed to a First-In-First-Out (FIFO) Sliding Window list storing exactly the $20$ most recent samples[cite: 1, 2]. The xApp computes the rolling mean ($\mu$) and standard deviation ($\sigma$) to derive the statistical Z-Score:
+
+$$Z_{score} = \frac{x_i - \mu}{\sigma}$$
+
+This allows the xApp to dynamically distinguish between normal network jitter (within-limit noise) and actual traffic anomalies[cite: 1, 2].
+
+### 3. Decide & Act (E2SM-RC)
+
+### Congestion State: If the condition $|Z_{score}| > 2.0$ is met, a traffic spike (anomaly) is detected[cite: 1, 2]. The xApp immediately calculates a throttled PRB threshold:
+
+$$\text{New PRB Limit} = \max\left(10, \lfloor \text{Current Limit} \times 0.8 \rfloor\right)$$
+
+This value is wrapped into an E2SM-RC Control Message (Format 1 encoded via ASN.1 PER rules) and dispatched over the E2 interface as an RMR 12040 (RIC_CONTROL_REQ).
+
+### Recovery State: When the Z-Score returns to the $[-2.0, 2.0]$ range, the scheduler gradually restores resources in incremental steps of $+5$ PRBs per cycle until it reaches full capacity ($100\%$).
+       
 ## Repository Structure
  
 ```text
@@ -79,9 +125,9 @@ https://docs.srsran.com/en/latest/
 The core contribution of this thesis, the my_smart_rc_xapp.py, runs on Near-RT RIC. It subscribes to Key Performance Measurements (KPMs) from the gNB via the E2 interface,
 analyzes downlink throughput (DRB.UEThpDl) using a Z-Score algorithm with a sliding window, and sends RAN Control (RC) messages to dynamically throttle Physical Resource
 Blocks (PRBs) when congestion is detected.
- 
- 
-Hardware Requirements:
+
+  
+## Hardware Requirements:
  
 Lab Workstation Dell OptiPlex 7060 (or equivalent) with Intel Core i7-8700, 16GB RAM, Ubuntu 22.04
 Core Network VM Separate machine or VM with Ubuntu Server, 4GB+ RAM
@@ -89,7 +135,7 @@ SDR (O-RU)  USRP B210 with USB 3.0 connection
 User Equipment (UE) 5G-compatible smartphone (e.g., Samsung Galaxy A17 5G)
 SIM Card    Programmable SIM card with IMSI: 001010000000001
  
-Software Requirements:
+## Software Requirements:
  
 Software           Version      Purpose
 Docker           20.10+         Container runtime for Near-RT RIC
